@@ -1,0 +1,172 @@
+\documentclass[journal]{IEEEtran}
+\usepackage[a5paper, margin=10mm, onecolumn]{geometry}
+%\usepackage{lmodern} % Ensure lmodern is loaded for pdflatex
+\usepackage{tfrupee} % Include tfrupee package
+
+\setlength{\headheight}{1cm} % Set the height of the header box
+\setlength{\headsep}{0mm}     % Set the distance between the header box and the top of the text
+
+\usepackage{gvv-book}
+\usepackage{gvv}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{txfonts}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{gensymb}
+\usepackage{comment}
+\usepackage[breaklinks=true]{hyperref}
+\usepackage{tkz-euclide} 
+\usepackage{listings}
+% \usepackage{gvv}                                        
+\def\inputGnumericTable{}                                 
+\usepackage[latin1]{inputenc}                                
+\usepackage{color}                                            
+\usepackage{array}                                            
+\usepackage{longtable}                                       
+\usepackage{calc}                                             
+\usepackage{multirow}                                         
+\usepackage{hhline}                                           
+\usepackage{ifthen}                                           
+\usepackage{lscape}
+\begin{document}
+
+\bibliographystyle{IEEEtran}
+\vspace{3cm}
+
+\title{11.16.4.7.4}
+\author{EE24BTECH11017 - D.Karthik}
+ \maketitle
+% \newpage
+% \bigskip
+{\let\newpage\relax\maketitle}
+
+\renewcommand{\thefigure}{\theenumi}
+\renewcommand{\thetable}{\theenumi}
+\setlength{\intextsep}{10pt} % Space between text and floats
+
+
+\numberwithin{equation}{enumi}
+\numberwithin{figure}{enumi}
+\renewcommand{\thetable}{\theenumi}
+\textbf{Problem Statement :}
+
+Given two events \( A \) and \( B \) such that:
+
+
+   $ P(A) = 0.54, \quad P(B) = 0.69, \quad P(A  B) = 0.35$
+
+Find \( P(B  A^\prime) \).
+\section*{Solution Using Boolean Logic}
+
+Given:
+\[
+P(A) = 0.54, \quad P(B) = 0.69, \quad P(A  B) = 0.35
+\]
+We need to find:
+\[
+P(B A^\prime)
+\]
+
+\subsection*{Step 1: Boolean Logic Decomposition}
+
+\begin{align}
+    A + A &= A\\
+    AA &= A \\
+    A + A^\prime  &= 1\\
+    AA^\prime  &= 0 \\
+    AB &= BA\\
+    A + B &= B + A\\
+    \brak{A + B} + C &= A + \brak{B + C} \\
+    \brak{AB}C &= A\brak{BC} \\
+    A\brak{B + C} &= AB + AC \\
+    A + BC &= \brak{A + B}\brak{A + C} \\
+    P\brak{1} &= 1\\
+    P\brak{A + B} &= P\brak{A} + P\brak{B}, \text{ if } P\brak{AB} = 0
+\end{align}
+
+De Morgan's Theorems:
+\begin{align}
+    \brak{A + B}^\prime  = A^\prime  B^\prime  \label{eq:dm1} \\
+    \brak{AB}^\prime  = A^\prime  + B^\prime  \label{eq:dm2}
+\end{align}
+Using these axioms,
+\begin{align}
+B &=\brak{A+A^\prime }B \\
+    &= AB + A^\prime  B \label{eq:B}\\
+    P\brak{B} &= P\brak{AB} + P\brak{A^\prime B}\\
+    P\brak{A^\prime B} &= P\brak{B} - P\brak{AB}\\
+    P\brak{A^\prime B} &= 0.69 - 0.35 \\
+    P\brak{A^\prime B} &= 0.34
+\end{align}
+
+
+
+\section{Solution Using Random Variables and Conditional Probability}
+
+Let \( X \) be an indicator random variable such that:
+
+\[
+X =
+\begin{cases}
+1, & \text{if } B \text{ occurs}, \\
+0, & \text{otherwise}.
+\end{cases}
+\]
+
+Using conditional probability,
+
+\[
+P(B) = P(B | A) P(A) + P(B | A^\prime) P(A^\prime)
+\]
+
+Rearranging to find \( P(B | A^\prime) P(A^\prime) \):
+
+\[
+P(B | A^\prime) P(A^\prime) = P(B) - P(B | A) P(A)
+\]
+
+We compute \( P(B | A) \):
+
+\[
+P(B | A) = \frac{P(A  B)}{P(A)} = \frac{0.35}{0.54} \approx 0.6481
+\]
+
+Similarly, we compute \( P(A^\prime) \):
+
+\[
+P(A^\prime) = 1 - P(A) = 1 - 0.54 = 0.46
+\]
+
+Now, solving for \( P(B | A^\prime) \):
+
+\[
+P(B | A^\prime) = \frac{P(B) - P(A  B)}{P(A^\prime)}
+\]
+
+\[
+= \frac{0.69 - 0.35}{0.46} = \frac{0.34}{0.46} \approx 0.7391
+\]
+
+Thus,
+
+\[
+P(B \cap A^\prime) = P(B | A^\prime) P(A^\prime) = 0.7391 \times 0.46 = 0.34
+\]
+
+\textbf{Monte Carlo Simulation Approach:} We can verify this result by simulating a large number of trials where:
+\begin{enumerate}
+    \item Generate a random value to determine if \( A \) occurs.
+    \item Generate a random value to determine if \( B \) occurs, conditioned on \( A \) or \( A^\prime \).
+    \item Count occurrences where \( B \text{ and } A^\prime \) happens.
+\end{enumerate}
+
+Running a simulation with one million trials will produce an estimate close to \( 0.34 \), confirming our calculations.
+
+
+\end{document}
